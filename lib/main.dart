@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'features/user/profile/profile_screen.dart';
+import 'features/admin/dashboard/dashboard_screen.dart'; // Admin Dashboard module
 
 void main() {
   runApp(const MyApp());
@@ -11,13 +11,13 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      title: 'EventifyU',
       debugShowCheckedModeBanner: false,
-      title: 'EVENT-HUB',
       theme: ThemeData(
-        scaffoldBackgroundColor: Colors.black,
-        primarySwatch: Colors.deepPurple,
+        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+        useMaterial3: true,
       ),
-      home: const ProfileScreen(),
+      home: const AdminDashboardScreen(),
     );
   }
 }
