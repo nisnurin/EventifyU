@@ -11,28 +11,11 @@ class DetailDashboardScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xFFF8F9FA),
-      // --- APPBAR SECTION WITH THE EDIT BUTTON ---
       appBar: AppBar(
         title: const Text('Detail Event', style: TextStyle(fontWeight: FontWeight.bold)),
         centerTitle: true,
         backgroundColor: Colors.white,
         elevation: 0,
-        // INI BUTANG EDIT YANG AWAK NAK TU, DAH DISELIT KAN DENGAN LARIAN NAVIGASI YANG BETUL
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.edit, color: Colors.blue),
-            tooltip: 'Edit Event',
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => EditEventScreen(event: event),
-                ),
-              );
-            },
-          ),
-          const SizedBox(width: 8), // Right edge padding
-        ],
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16.0),
@@ -113,7 +96,47 @@ class DetailDashboardScreen extends StatelessWidget {
                 ],
               ),
             ),
-            const SizedBox(height: 30),
+            
+            // --- NEW POSITION: FULL-WIDTH PURPLE EDIT BUTTON INSIDE SCROLLVIEW ---
+            // This ensures the button only appears at the very end of the content
+            const SizedBox(height: 32),
+            Container(
+              width: double.infinity,
+              height: 56,
+              decoration: BoxDecoration(
+                gradient: const LinearGradient(
+                  colors: [Color(0xFF9D59FF), Color(0xFF8533FF)],
+                  begin: Alignment.centerLeft,
+                  end: Alignment.centerRight,
+                ),
+                borderRadius: BorderRadius.circular(16),
+              ),
+              child: ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.transparent,
+                  shadowColor: Colors.transparent,
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+                ),
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => EditEventScreen(event: event),
+                    ),
+                  );
+                },
+                child: const Text(
+                  'Edit Event',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                    letterSpacing: 0.5,
+                  ),
+                ),
+              ),
+            ),
+            const SizedBox(height: 20), // Bottom padding after the button
           ],
         ),
       ),
@@ -150,7 +173,6 @@ class DetailDashboardScreen extends StatelessWidget {
   }
 }
 
-// Customized Pie Chart Painter representing precise shifted visual divisions from Figma
 class FigmaPieChartPainter extends CustomPainter {
   final double fskm;
   final double fpp;
@@ -169,7 +191,6 @@ class FigmaPieChartPainter extends CustomPainter {
     final paintFSKM = Paint()..color = const Color(0xFF3200C0); 
     final paintFPP = Paint()..color = const Color(0xFF8146EC);  
 
-    // Transform percentages into explicit radians arcs
     double sweepFPHP = fphp * 2 * pi;
     double sweepACIS = acis * 2 * pi;
     double sweepFSKM = fskm * 2 * pi;
@@ -177,24 +198,20 @@ class FigmaPieChartPainter extends CustomPainter {
 
     double startAngle = 0;
 
-    // 1. FPHP Sector Segment
     canvas.drawArc(Rect.fromCircle(center: center, radius: radius), startAngle, sweepFPHP, true, paintFPHP);
     _drawLabel(canvas, center, radius, startAngle, sweepFPHP, '${(fphp * 100).toInt()}%\nFPHP');
     startAngle += sweepFPHP;
 
-    // 2. ACIS Sector Segment (Slight offset left-downward matching Figma)
     final centerACIS = Offset(center.dx - 3, center.dy + 1);
     canvas.drawArc(Rect.fromCircle(center: centerACIS, radius: radius), startAngle, sweepACIS, true, paintACIS);
     _drawLabel(canvas, centerACIS, radius, startAngle, sweepACIS, '${(acis * 100).toInt()}%\nACIS');
     startAngle += sweepACIS;
 
-    // 3. FSKM Sector Segment (Exploded structural offset upwards matching Figma)
     final centerFSKM = Offset(center.dx - 2, center.dy - 4);
     canvas.drawArc(Rect.fromCircle(center: centerFSKM, radius: radius), startAngle, sweepFSKM, true, paintFSKM);
     _drawLabel(canvas, centerFSKM, radius, startAngle, sweepFSKM, '${(fskm * 100).toInt()}%\nFSKM');
     startAngle += sweepFSKM;
 
-    // 4. FPP Sector Segment (Exploded structural offset rightwards)
     final centerFPP = Offset(center.dx + 4, center.dy - 1);
     canvas.drawArc(Rect.fromCircle(center: centerFPP, radius: radius), startAngle, sweepFPP, true, paintFPP);
     _drawLabel(canvas, centerFPP, radius, startAngle, sweepFPP, '${(fpp * 100).toInt()}%\nFPP');
