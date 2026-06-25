@@ -17,9 +17,15 @@ dependencies:
   qr_flutter: ^4.1.0
   url_launcher: ^6.3.0
 
+  pdf: ^3.11.0
+  printing: ^5.13.0
+
+  flutter_local_notifications: ^17.0.0
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
+    
 
   # Standard linting rules for codebase quality
   flutter_lints: ^6.0.0
