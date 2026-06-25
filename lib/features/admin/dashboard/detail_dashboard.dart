@@ -1,12 +1,18 @@
+
 import 'dart:math';
 import 'package:flutter/material.dart';
 import 'event_model.dart';
 import 'edit_event_screen.dart';
 
-class DetailDashboardScreen extends StatelessWidget {
+class DetailDashboardScreen extends StatefulWidget {
   final EventModel event;
   const DetailDashboardScreen({super.key, required this.event});
 
+  @override
+  State<DetailDashboardScreen> createState() => _DetailDashboardScreenState();
+}
+
+class _DetailDashboardScreenState extends State<DetailDashboardScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -26,7 +32,7 @@ class DetailDashboardScreen extends StatelessWidget {
             ClipRRect(
               borderRadius: BorderRadius.circular(16),
               child: Image.asset(
-                event.imagePath,
+                widget.event.imagePath,
                 height: 180,
                 width: double.infinity,
                 fit: BoxFit.cover,
@@ -34,13 +40,18 @@ class DetailDashboardScreen extends StatelessWidget {
                   return Container(
                     height: 180,
                     color: const Color(0xFFF3E8FF),
-                    child: const Center(child: Icon(Icons.image, color: Colors.deepPurple, size: 40)),
+                    child: const Center(
+                      child: Icon(Icons.image, color: Colors.deepPurple, size: 40),
+                    ),
                   );
                 },
               ),
             ),
             const SizedBox(height: 20),
-            Text(event.title, style: const TextStyle(fontSize: 22, fontWeight: FontWeight.bold)),
+            Text(
+              widget.event.title,
+              style: const TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+            ),
             const SizedBox(height: 24),
             Row(
               children: [
@@ -53,7 +64,10 @@ class DetailDashboardScreen extends StatelessWidget {
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(event.organizerName, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 14)),
+                    Text(
+                      widget.event.organizerName,
+                      style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
+                    ),
                     const Text('Organizer', style: TextStyle(color: Colors.grey, fontSize: 12)),
                   ],
                 ),
@@ -62,12 +76,15 @@ class DetailDashboardScreen extends StatelessWidget {
             const SizedBox(height: 24),
             const Text('About this event:', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
             const SizedBox(height: 8),
-            Text(event.description, style: const TextStyle(color: Colors.black87, height: 1.5, fontSize: 13)),
+            Text(
+              widget.event.description,
+              style: const TextStyle(color: Colors.black87, height: 1.5, fontSize: 13),
+            ),
             const SizedBox(height: 24),
             
-            _buildStatTile(Icons.person_outline, 'Total Participant', '${event.totalParticipants}'),
-            _buildStatTile(Icons.sync, 'Status Event', event.status),
-            _buildStatTile(Icons.analytics_outlined, 'Attendance', '${event.attendance}', progress: event.attendancePercentage),
+            _buildStatTile(Icons.person_outline, 'Total Participant', '${widget.event.totalParticipants}'),
+            _buildStatTile(Icons.sync, 'Status Event', widget.event.status),
+            _buildStatTile(Icons.analytics_outlined, 'Attendance', '${widget.event.attendance}', progress: widget.event.attendancePercentage),
             
             // Faculty Statistics UI Card mapped directly to selected event percentages
             Container(
@@ -85,10 +102,10 @@ class DetailDashboardScreen extends StatelessWidget {
                       height: 200,
                       child: CustomPaint(
                         painter: FigmaPieChartPainter(
-                          fskm: event.fskmPercentage,
-                          fpp: event.fppPercentage,
-                          acis: event.acisPercentage,
-                          fphp: event.fphpPercentage,
+                          fskm: widget.event.fskmPercentage,
+                          fpp: widget.event.fppPercentage,
+                          acis: widget.event.acisPercentage,
+                          fphp: widget.event.fphpPercentage,
                         ),
                       ),
                     ),
@@ -97,8 +114,6 @@ class DetailDashboardScreen extends StatelessWidget {
               ),
             ),
             
-            // --- NEW POSITION: FULL-WIDTH PURPLE EDIT BUTTON INSIDE SCROLLVIEW ---
-            // This ensures the button only appears at the very end of the content
             const SizedBox(height: 32),
             Container(
               width: double.infinity,
@@ -117,13 +132,24 @@ class DetailDashboardScreen extends StatelessWidget {
                   shadowColor: Colors.transparent,
                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
                 ),
-                onPressed: () {
-                  Navigator.push(
+                onPressed: () async {
+                  // Await the return signal feedback from EditEventScreen
+                  final result = await Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => EditEventScreen(event: event),
+                      builder: (context) => EditEventScreen(event: widget.event),
                     ),
                   );
+
+                  if (context.mounted) {
+                    if (result == 'deleted') {
+                      // If deleted, go back down the root stack with the deletion result
+                      Navigator.pop(context, 'deleted');
+                    } else if (result == 'updated') {
+                      // Refresh current UI details view with updated entity properties
+                      setState(() {});
+                    }
+                  }
                 },
                 child: const Text(
                   'Edit Event',
@@ -165,7 +191,12 @@ class DetailDashboardScreen extends StatelessWidget {
           ),
           if (progress != null) ...[
             const SizedBox(height: 12),
-            LinearProgressIndicator(value: progress, backgroundColor: Colors.grey[200], color: Colors.deepPurple, minHeight: 6),
+            LinearProgressIndicator(
+              value: progress,
+              backgroundColor: Colors.grey[200],
+              color: Colors.deepPurple,
+              minHeight: 6,
+            ),
           ]
         ],
       ),

@@ -1,18 +1,17 @@
 name: eventifyu
 description: "A new Flutter project."
-publish_to: 'none'
+publish_to: 'none' # Prevents accidental publishing to pub.dev
 
 version: 1.0.0+1
 
 environment:
   sdk: '>=3.11.0 <4.0.0'
 
-
 dependencies:
   flutter:
     sdk: flutter
 
-
+  # Production dependencies
   cupertino_icons: ^1.0.8
   fl_chart: ^1.2.0
   qr_flutter: ^4.1.0
@@ -22,14 +21,13 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
 
-
+  # Standard linting rules for codebase quality
   flutter_lints: ^6.0.0
 
-
 flutter:
- 
+  # Enables the inclusion of Material Design icons and fonts
   uses-material-design: true
 
-  # Register the global asset directory for your dashboard image files
+  # Registered assets directories for the application
   assets:
-    - assets/dashboard/
+  - lib/features/assets/dashboard/
