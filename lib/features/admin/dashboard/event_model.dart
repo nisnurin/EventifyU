@@ -1,6 +1,5 @@
 class EventModel {
   final String title;
-  final String ticketId;
   final String month;
   final String day;
   final String time;
@@ -22,7 +21,6 @@ class EventModel {
 
   EventModel({
     required this.title,
-    required this.ticketId,
     required this.month,
     required this.day,
     required this.time,

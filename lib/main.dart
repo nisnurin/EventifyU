@@ -18,55 +18,13 @@ class MyEventApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      title: 'EventifyU',
       debugShowCheckedModeBanner: false,
-      title: 'UiTM Event Management',
       theme: ThemeData(
-        fontFamily: 'Roboto',
-        scaffoldBackgroundColor: const Color(0xFFF7F7FB),
-        colorScheme: ColorScheme.fromSeed(
-          seedColor: const Color(0xFF7A4DFF),
-          primary: const Color(0xFF7A4DFF),
-        ),
+        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+        useMaterial3: true,
       ),
-      initialRoute: HomeScreen.routeName,
-      onGenerateRoute: (settings) {
-        switch (settings.name) {
-          case HomeScreen.routeName:
-            return MaterialPageRoute(builder: (_) => const HomeScreen());
-
-          case DetailEventScreen.routeName:
-            final event = settings.arguments as EventModel;
-            return MaterialPageRoute(
-              builder: (_) => DetailEventScreen(event: event),
-            );
-
-          case ConfirmRegisterScreen.routeName:
-            final event = settings.arguments as EventModel;
-            return MaterialPageRoute(
-              builder: (_) => ConfirmRegisterScreen(event: event),
-            );
-
-          case DetailRegistrationScreen.routeName:
-            final event = settings.arguments as EventModel;
-            return MaterialPageRoute(
-              builder: (_) => DetailRegistrationScreen(event: event),
-            );
-
-          case MyEventScreen.routeName:
-            return MaterialPageRoute(builder: (_) => const MyEventScreen());
-
-          case ProfileScreen.routeName:
-            return MaterialPageRoute(builder: (_) => const ProfileScreen());
-
-          case NotificationScreen.routeName:
-            return MaterialPageRoute(
-              builder: (_) => const NotificationScreen(),
-            );
-
-          default:
-            return MaterialPageRoute(builder: (_) => const HomeScreen());
-        }
-      },
+      home: const AdminDashboardScreen(), // Admin Dashboard section -
     );
   }
 }

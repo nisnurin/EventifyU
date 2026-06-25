@@ -14,7 +14,6 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
   final List<EventModel> events = [
     EventModel(
       title: 'Pentas Rona Jiwa',
-      ticketId: '#8954673009',
       month: 'May',
       day: '20',
       time: '10.00 A.M - 12.00 P.M',
@@ -34,7 +33,6 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
     ),
     EventModel(
       title: 'Hari Terbuka Kelab',
-      ticketId: '#8954673010',
       month: 'Oct',
       day: '07',
       time: '08.00 P.M - 11.00 P.M',
@@ -54,7 +52,6 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
     ),
     EventModel(
       title: 'EventifyU Tech Summit 2026',
-      ticketId: '#8954673011',
       month: 'Jul',
       day: '15',
       time: '09.00 A.M - 04.00 P.M',
@@ -74,7 +71,6 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
     ),
     EventModel(
       title: 'Sukan UiTM Terengganu',
-      ticketId: '#8954673012',
       month: 'Aug',
       day: '12',
       time: '07.30 A.M - 01.00 P.M',
@@ -94,7 +90,6 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
     ),
     EventModel(
       title: 'Malam Kebudayaan & Kesenian',
-      ticketId: '#8954673013',
       month: 'Nov',
       day: '03',
       time: '08.30 P.M - 11.30 P.M',
@@ -178,7 +173,6 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(item.title, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 15), maxLines: 1, overflow: TextOverflow.ellipsis),
-                            Text('Ticket ID: ${item.ticketId}', style: const TextStyle(color: Colors.grey, fontSize: 12)),
                           ],
                         ),
                       ),
