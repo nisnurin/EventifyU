@@ -6,7 +6,7 @@ import 'features/user/events/my_event_screen.dart';
 import 'features/user/profile/profile_screen.dart';
 import 'features/user/notification/notification_screen.dart';
 import 'models/event_model.dart';
-
+import 'features/admin/dashboard/dashboard_screen.dart';
 void main() {
   runApp(const MyEventApp());
 }
@@ -23,7 +23,7 @@ class MyEventApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: const HomeScreen(),
+      home: const AdminDashboardScreen(),
     );
   }
 }

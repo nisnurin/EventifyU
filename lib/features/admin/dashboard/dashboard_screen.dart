@@ -1,8 +1,8 @@
-
-
 import 'package:flutter/material.dart';
 import 'event_model.dart';
 import 'detail_dashboard.dart';
+// FIX: Relative path used to step up out of the dashboard folder and into the profile folder
+import '../profile/profile_screen.dart'; 
 
 class AdminDashboardScreen extends StatefulWidget {
   const AdminDashboardScreen({super.key});
@@ -12,17 +12,15 @@ class AdminDashboardScreen extends StatefulWidget {
 }
 
 class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
-  // Tab Navigation State (0 = Events, 1 = All Event Analytics)
   int _selectedTab = 0;
+  int _currentBottomIndex = 0;
 
-  // Controllers to capture user input from the Add New Event form
   final TextEditingController _titleController = TextEditingController();
   final TextEditingController _organizerController = TextEditingController();
   final TextEditingController _dayController = TextEditingController();
   final TextEditingController _monthController = TextEditingController();
   final TextEditingController _locationController = TextEditingController();
 
-  // Dynamic event list configuration based on original mock records dataset
   List<EventModel> events = [
     EventModel(
       title: 'Pentas Rona Jiwa',
@@ -131,9 +129,7 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
     super.dispose();
   }
 
-  // Function to navigate to details and listen for update/delete actions
-  void _navigateToDetail(EventModel item) async {
-    // Wait for the result from DetailDashboardScreen execution context lifecycle
+  void _navigateToDetail(EventModel item, int index) async {
     final result = await Navigator.push(
       context,
       MaterialPageRoute(
@@ -141,21 +137,46 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
       ),
     );
 
-    // If result is 'deleted', remove the item from the list and refresh the screen
+    // Safeguard to ensure widget state is still active before rendering context elements
+    if (!mounted) return;
+
     if (result == 'deleted') {
       setState(() {
-        events.remove(item);
+        events.removeAt(index);
       });
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Event successfully deleted.')),
       );
+    } else if (result is Map<String, dynamic>) {
+      setState(() {
+        events[index] = EventModel(
+          title: result['title'] ?? item.title,
+          month: result['month'] ?? item.month,
+          day: result['day'] ?? item.day,
+          time: result['time'] ?? item.time,
+          fullDate: '${result['month']} ${result['day']}, 2026',
+          location: result['location'] ?? item.location,
+          totalParticipants: item.totalParticipants,
+          status: item.status,
+          attendance: item.attendance,
+          attendancePercentage: item.attendancePercentage,
+          organizerName: item.organizerName,
+          description: result['description'] ?? item.description,
+          imagePath: result['imagePath'] ?? item.imagePath,
+          fskmPercentage: item.fskmPercentage,
+          fppPercentage: item.fppPercentage,
+          acisPercentage: item.acisPercentage,
+          fphpPercentage: item.fphpPercentage,
+        );
+      });
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Event successfully updated.')),
+      );
     } else if (result == 'updated') {
-      // If your edit screen updates fields, trigger setState to reload the card content
       setState(() {});
     }
   }
 
-  // Function to display the Add New Event creation form sheet
   void _showAddEventBottomSheet(BuildContext context) {
     showModalBottomSheet(
       context: context,
@@ -267,7 +288,7 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
                             attendancePercentage: 0.0,
                             organizerName: _organizerController.text.isEmpty ? 'University Secretariat' : _organizerController.text,
                             description: 'No description provided yet.',
-                            imagePath: '', // Empty path value maps cleanly to placeholder visual container boxes
+                            imagePath: '', 
                             fskmPercentage: 0.25,
                             fppPercentage: 0.25,
                             acisPercentage: 0.25,
@@ -300,6 +321,46 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
 
   @override
   Widget build(BuildContext context) {
+    return Scaffold(
+      body: IndexedStack(
+        index: _currentBottomIndex,
+        children: [
+          _buildMainDashboardView(), 
+          const AdminProfileScreen(), 
+        ],
+      ),
+      bottomNavigationBar: Container(
+        decoration: const BoxDecoration(
+          color: Colors.white,
+          border: Border(top: BorderSide(color: Color(0xFFE5E7EB), width: 1)),
+        ),
+        child: BottomNavigationBar(
+          currentIndex: _currentBottomIndex,
+          onTap: (index) {
+            setState(() {
+              _currentBottomIndex = index;
+            });
+          },
+          type: BottomNavigationBarType.fixed,
+          selectedItemColor: const Color(0xFF9333EA),
+          unselectedItemColor: Colors.grey,
+          selectedLabelStyle: const TextStyle(fontWeight: FontWeight.bold),
+          items: const [
+            BottomNavigationBarItem(
+              icon: Icon(Icons.home_filled),
+              label: 'Home',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.person_outline),
+              label: 'Profile',
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildMainDashboardView() {
     return Scaffold(
       backgroundColor: const Color(0xFFF8F9FA),
       appBar: AppBar(
@@ -437,7 +498,7 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
                     ),
                     IconButton(
                       icon: const Icon(Icons.arrow_forward_ios, color: Colors.deepPurple, size: 16),
-                      onPressed: () => _navigateToDetail(item), 
+                      onPressed: () => _navigateToDetail(item, index), 
                     ),
                   ],
                 ),
