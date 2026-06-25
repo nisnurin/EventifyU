@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:qr_flutter/qr_flutter.dart';
 import '../../../core/app_colors.dart';
 import '../../../core/dummy_data.dart';
 import '../../../models/event_model.dart';
+import '../events/detail_registration.dart';
 
-class DetailRegistrationScreen extends StatelessWidget {
-  static const String routeName = '/detail-registration';
+class ConfirmRegisterScreen extends StatelessWidget {
+  static const String routeName = '/confirm-register';
   final EventModel event;
 
-  const DetailRegistrationScreen({super.key, required this.event});
+  const ConfirmRegisterScreen({super.key, required this.event});
 
   @override
   Widget build(BuildContext context) {
@@ -28,16 +28,13 @@ class DetailRegistrationScreen extends StatelessWidget {
                     child: const Icon(Icons.arrow_back_ios_new, size: 18),
                   ),
                   const SizedBox(width: 14),
-                  const Expanded(
-                    child: Text(
-                      'Detail Registration',
-                      style: TextStyle(
-                        fontWeight: FontWeight.w700,
-                        color: AppColors.textDark,
-                      ),
+                  const Text(
+                    'Detail Registration',
+                    style: TextStyle(
+                      fontWeight: FontWeight.w700,
+                      color: AppColors.textDark,
                     ),
                   ),
-                  const Icon(Icons.info_outline, size: 18),
                 ],
               ),
               const SizedBox(height: 18),
@@ -105,52 +102,76 @@ class DetailRegistrationScreen extends StatelessWidget {
                         ],
                       ),
                     ),
-                    const SizedBox(height: 14),
-                    Container(
-                      padding: const EdgeInsets.all(16),
-                      decoration: _cardDecoration(),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          const Text(
-                            'Attendance QR',
-                            style: TextStyle(
-                              fontWeight: FontWeight.w700,
-                              color: AppColors.textDark,
-                            ),
+                    const SizedBox(height: 16),
+                    Row(
+                      children: const [
+                        Icon(Icons.error, color: AppColors.danger, size: 18),
+                        SizedBox(width: 8),
+                        Text(
+                          'Make sure your information is correct.',
+                          style: TextStyle(
+                            color: AppColors.textGrey,
+                            fontSize: 12,
                           ),
-                          const SizedBox(height: 4),
-                          const Text(
-                            'Please scan when the event is started.',
-                            style: TextStyle(
-                              color: AppColors.textGrey,
-                              fontSize: 12,
-                            ),
-                          ),
-                          const SizedBox(height: 16),
-                          Center(
-                            child: QrImageView(
-                              data: event.qrData,
-                              size: 150,
-                              backgroundColor: Colors.white,
-                            ),
-                          ),
-                        ],
-                      ),
+                        ),
+                      ],
                     ),
                   ],
                 ),
               ),
               InkWell(
                 borderRadius: BorderRadius.circular(14),
-                onTap: () {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                      content: Text(
-                        'Download feature prepared. You can later save as PNG using screenshot/export package.',
-                      ),
-                    ),
+                onTap: () async {
+                  final confirmed = await showDialog<bool>(
+                    context: context,
+                    builder: (context) {
+                      return AlertDialog(
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(18),
+                        ),
+                        title: const Text('Confirm Registration'),
+                        content: const Text(
+                          'Do you want to confirm this registration?',
+                        ),
+                        actions: [
+                          TextButton(
+                            onPressed: () {
+                              Navigator.pop(context, false);
+                            },
+                            child: const Text('Cancel'),
+                          ),
+                          ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: AppColors.primary,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                            ),
+                            onPressed: () {
+                              Navigator.pop(context, true);
+                            },
+                            child: const Text(
+                              'Confirm',
+                              style: TextStyle(color: Colors.white),
+                            ),
+                          ),
+                        ],
+                      );
+                    },
                   );
+
+                  if (confirmed == true) {
+                    final updatedEvent = event.copyWith(isRegistered: true);
+
+                    if (!context.mounted) return;
+
+                    Navigator.pushNamedAndRemoveUntil(
+                      context,
+                      DetailRegistrationScreen.routeName,
+                      (route) => route.settings.name == '/',
+                      arguments: updatedEvent,
+                    );
+                  }
                 },
                 child: Container(
                   height: 54,
@@ -159,23 +180,12 @@ class DetailRegistrationScreen extends StatelessWidget {
                     gradient: AppColors.primaryGradient,
                     borderRadius: BorderRadius.circular(14),
                   ),
-                  child: const Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Icon(
-                        Icons.download_outlined,
-                        color: Colors.white,
-                        size: 18,
-                      ),
-                      SizedBox(width: 8),
-                      Text(
-                        'Download Registration',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
-                    ],
+                  child: const Text(
+                    'Confirm Registration',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.w600,
+                    ),
                   ),
                 ),
               ),

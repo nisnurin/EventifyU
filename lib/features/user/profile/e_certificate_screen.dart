@@ -16,7 +16,7 @@ class ECertificateScreen extends StatelessWidget {
         children: const [
 
           CertificateCard(
-            title: "PERTAS Nova",
+            title: "Pentas Rona Jiwa",
             date: "8.00 AM - 12.00 PM",
           ),
 
@@ -26,7 +26,7 @@ class ECertificateScreen extends StatelessWidget {
           ),
 
           CertificateCard(
-            title: "Sublime",
+            title: "Suite",
             date: "8.00 AM - 5.00 PM",
           ),
 
