@@ -1,18 +1,21 @@
+// Location: lib/features/admin/dashboard/event_model.dart
+
 class EventModel {
-  final String title;
+  // ✅ REMOVED 'final' - These fields must be mutable so they can be updated by the Edit Screen
+  String title;
+  String description;
+  String location;
+  
+  // These remain final as they don't change during edit operations
   final String month;
   final String day;
   final String time;
   final String fullDate;
-  final String location;
   final int totalParticipants;
   final String status;
   final int attendance;
   final double attendancePercentage;
   final String organizerName;
-  final String description;
-  
-  // Added properties for dynamic local assets images and customized faculty percentages
   final String imagePath;
   final double fskmPercentage;
   final double fppPercentage;

@@ -1,10 +1,11 @@
+
+
 import 'package:flutter/material.dart';
 import 'event_model.dart';
 
 // Replicated Figma UI Layout for Managing and Updating Existing Events dynamically
 class EditEventScreen extends StatefulWidget {
   final EventModel event;
-
   const EditEventScreen({super.key, required this.event});
 
   @override
@@ -12,7 +13,28 @@ class EditEventScreen extends StatefulWidget {
 }
 
 class _EditEventScreenState extends State<EditEventScreen> {
-  
+  // Controllers to capture live modifications
+  late TextEditingController _titleController;
+  late TextEditingController _locationController;
+  late TextEditingController _descriptionController;
+
+  @override
+  void initState() {
+    super.initState();
+    // Initialize controllers with current instance model parameters
+    _titleController = TextEditingController(text: widget.event.title);
+    _locationController = TextEditingController(text: widget.event.location);
+    _descriptionController = TextEditingController(text: widget.event.description);
+  }
+
+  @override
+  void dispose() {
+    _titleController.dispose();
+    _locationController.dispose();
+    _descriptionController.dispose();
+    super.dispose();
+  }
+
   void _triggerDeleteSequence() {
     showDialog(
       context: context,
@@ -28,11 +50,8 @@ class _EditEventScreenState extends State<EditEventScreen> {
             ),
             TextButton(
               onPressed: () {
-                Navigator.pop(context);
-                Navigator.pop(context);
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(content: Text('Event records purged successfully')),
-                );
+                Navigator.pop(context); // Close the target confirmation dialog prompt
+                Navigator.pop(context, 'deleted'); // Pop back to dashboard root view stack with data payload
               },
               child: const Text('Delete', style: TextStyle(color: Colors.red, fontWeight: FontWeight.bold)),
             ),
@@ -121,21 +140,28 @@ class _EditEventScreenState extends State<EditEventScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  // Editable Title Textfield Input Component
                   Row(
                     children: [
                       Expanded(
-                        child: Text(
-                          widget.event.title,
+                        child: TextField(
+                          controller: _titleController,
                           style: const TextStyle(fontSize: 22, fontWeight: FontWeight.bold, color: Color(0xFF1F2937)),
-                          maxLines: 2,
-                          overflow: TextOverflow.ellipsis,
+                          decoration: const InputDecoration(
+                            hintText: 'Event Title',
+                            border: InputBorder.none,
+                            isDense: true,
+                          ),
                         ),
                       ),
                       const SizedBox(width: 8),
                       const Icon(Icons.edit, size: 18, color: Colors.black54),
                     ],
                   ),
-                  const SizedBox(height: 18),
+                  const Divider(color: Color(0xFFE5E7EB)),
+                  const SizedBox(height: 10),
+                  
+                  // Meta Info Matrix Grid Panel Layout Component
                   Container(
                     padding: const EdgeInsets.all(16),
                     decoration: BoxDecoration(
@@ -143,21 +169,23 @@ class _EditEventScreenState extends State<EditEventScreen> {
                       borderRadius: BorderRadius.circular(14),
                       border: Border.all(color: const Color(0xFFE5E7EB)),
                       boxShadow: [
-                        BoxShadow(color: Colors.black.withAlpha(2), blurRadius: 10, offset: const Offset(0, 2))
+                        BoxShadow(color: Colors.black.withOpacity(0.02), blurRadius: 10, offset: const Offset(0, 2))
                       ],
                     ),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: [
-                        _buildFigmaHorizontalItem(Icons.access_time_filled, 'Time', widget.event.time),
-                        _buildFigmaHorizontalItem(Icons.calendar_month, 'Date', '${widget.event.month} ${widget.event.day}'),
-                        _buildFigmaHorizontalItem(Icons.location_on, 'Location', widget.event.location),
+                        _buildStaticMetaItem(Icons.access_time_filled, 'Time', widget.event.time),
+                        _buildStaticMetaItem(Icons.calendar_month, 'Date', '${widget.event.month} ${widget.event.day}'),
+                        Expanded(
+                          child: _buildEditableLocationItem(Icons.location_on, 'Location'),
+                        ),
                       ],
                     ),
                   ),
                   const SizedBox(height: 24),
                   
-                  // DINAMIK: Sekarang membaca nama organizer mengikut event yang dipilih
+                  // Dynamic display binding tracking for organizer assignment parameters
                   Row(
                     children: [
                       const CircleAvatar(
@@ -170,7 +198,7 @@ class _EditEventScreenState extends State<EditEventScreen> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            widget.event.organizerName, // <-- Dinamik!
+                            widget.event.organizerName,
                             style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 14, color: Color(0xFF1F2937)),
                           ),
                           Text('Organizer', style: TextStyle(color: Colors.grey[500], fontSize: 12)),
@@ -182,14 +210,22 @@ class _EditEventScreenState extends State<EditEventScreen> {
                   const Text('About this event:', style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: Color(0xFF1F2937))),
                   const SizedBox(height: 6),
                   
-                  // DINAMIK: Membaca description yang tepat tanpa teks statik
-                  Text(
-                    widget.event.description, // <-- Dinamik!
+                  // Editable Description Input field block
+                  TextField(
+                    controller: _descriptionController,
+                    maxLines: null,
                     style: TextStyle(color: Colors.grey[600], height: 1.4, fontSize: 13),
+                    decoration: const InputDecoration(
+                      hintText: 'Enter description text here...',
+                      border: InputBorder.none,
+                      isDense: true,
+                    ),
                   ),
                   const SizedBox(height: 4),
                   const Text('Read more', style: TextStyle(color: Color(0xFF6366F1), fontWeight: FontWeight.bold, fontSize: 13)),
                   const SizedBox(height: 24),
+                  
+                  // Attendance Verification Layout block component UI elements
                   Container(
                     width: double.infinity,
                     padding: const EdgeInsets.all(16),
@@ -203,7 +239,7 @@ class _EditEventScreenState extends State<EditEventScreen> {
                       children: [
                         const Text('Attendance QR', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14, color: Color(0xFF1F2937))),
                         const SizedBox(height: 2),
-                        Text('Please scan when the event is started.', style: TextStyle(color: Colors.grey, fontSize: 12)),
+                        const Text('Please scan when the event is started.', style: TextStyle(color: Colors.grey, fontSize: 12)),
                         const SizedBox(height: 20),
                         Center(
                           child: Container(
@@ -211,7 +247,7 @@ class _EditEventScreenState extends State<EditEventScreen> {
                             decoration: BoxDecoration(
                               color: Colors.white,
                               borderRadius: BorderRadius.circular(12),
-                              border: Border.all(color: Colors.grey.withAlpha(38)),
+                              border: Border.all(color: Colors.grey.withOpacity(0.15)),
                             ),
                             child: const Icon(Icons.qr_code_2_sharp, size: 130, color: Colors.black87),
                           ),
@@ -220,6 +256,8 @@ class _EditEventScreenState extends State<EditEventScreen> {
                     ),
                   ),
                   const SizedBox(height: 24),
+                  
+                  // Secondary Attachment action element button panel interface
                   SizedBox(
                     width: double.infinity,
                     height: 50,
@@ -249,6 +287,8 @@ class _EditEventScreenState extends State<EditEventScreen> {
                     ),
                   ),
                   const SizedBox(height: 14),
+                  
+                  // Primary Action Trigger to serialize mutation update sequence updates back down to parent view
                   SizedBox(
                     width: double.infinity,
                     height: 50,
@@ -265,7 +305,14 @@ class _EditEventScreenState extends State<EditEventScreen> {
                           shadowColor: Colors.transparent,
                           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                         ),
-                        onPressed: () => Navigator.pop(context),
+                        onPressed: () {
+                          // Mutate base values dynamically into shared reference mapping instance safely
+                          widget.event.title = _titleController.text;
+                          widget.event.location = _locationController.text;
+                          widget.event.description = _descriptionController.text;
+
+                          Navigator.pop(context, 'updated'); // Signal update listener callback back down navigation hierarchy
+                        },
                         child: const Text('Save', style: TextStyle(color: Colors.white, fontSize: 15, fontWeight: FontWeight.bold)),
                       ),
                     ),
@@ -279,7 +326,7 @@ class _EditEventScreenState extends State<EditEventScreen> {
     );
   }
 
-  Widget _buildFigmaHorizontalItem(IconData icon, String label, String value) {
+  Widget _buildStaticMetaItem(IconData icon, String label, String value) {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
@@ -297,6 +344,33 @@ class _EditEventScreenState extends State<EditEventScreen> {
           style: const TextStyle(fontWeight: FontWeight.bold, color: Color(0xFF6366F1), fontSize: 11),
           maxLines: 1,
           overflow: TextOverflow.ellipsis,
+        ),
+      ],
+    );
+  }
+
+  Widget _buildEditableLocationItem(IconData icon, String label) {
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(icon, color: const Color(0xFF6366F1), size: 13),
+            const SizedBox(width: 4),
+            Text(label, style: const TextStyle(color: Colors.grey, fontSize: 11)),
+          ],
+        ),
+        const SizedBox(height: 4),
+        TextField(
+          controller: _locationController,
+          textAlign: TextAlign.center,
+          style: const TextStyle(fontWeight: FontWeight.bold, color: Color(0xFF6366F1), fontSize: 11),
+          decoration: const InputDecoration(
+            border: InputBorder.none,
+            isDense: true,
+            contentPadding: EdgeInsets.zero,
+          ),
         ),
       ],
     );
