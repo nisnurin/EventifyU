@@ -16,10 +16,10 @@ class _AdminSettingsScreenState extends State<AdminSettingsScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.black,
+      backgroundColor: const Color(0xFFF8F9FA),
       appBar: AppBar(
         title: const Text("General Settings"),
-        backgroundColor: Colors.black,
+        backgroundColor: const Color(0xFFF8F9FA),
       ),
 
       body: Padding(
