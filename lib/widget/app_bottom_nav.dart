@@ -25,9 +25,9 @@ class AppBottomNav extends StatelessWidget {
         (route) => false,
       );
     } else if (index == 2) {
-      Navigator.pushNamedAndRemoveUntil(
+      Navigator.pushAndRemoveUntil(
         context,
-        ProfileScreen.routeName,
+        MaterialPageRoute(builder: (_) => const ProfileScreen()),
         (route) => false,
       );
     }

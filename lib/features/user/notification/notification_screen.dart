@@ -1,93 +1,196 @@
 import 'package:flutter/material.dart';
-import '../../../core/app_colors.dart';
+
 
 class NotificationScreen extends StatelessWidget {
-  static const String routeName = '/notification';
-
+ 
   const NotificationScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.background,
+      backgroundColor: Colors.black,
       appBar: AppBar(
-        backgroundColor: AppColors.background,
+        backgroundColor: Colors.black,
+        foregroundColor: Colors.white,
         elevation: 0,
         title: const Text(
-          'Notifications',
+          "Notification",
           style: TextStyle(
-            color: AppColors.textDark,
-            fontWeight: FontWeight.w700,
+            fontWeight: FontWeight.bold,
           ),
         ),
-        iconTheme: const IconThemeData(color: AppColors.textDark),
+        actions: [
+          Padding(
+            padding: const EdgeInsets.only(right: 12),
+            child: Center(
+              child: Container(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 12,
+                  vertical: 6,
+                ),
+                decoration: BoxDecoration(
+                  color: Colors.deepPurple,
+                  borderRadius: BorderRadius.circular(20),
+                ),
+                child: const Text(
+                  "1 NEW",
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 11,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+            ),
+          )
+        ],
       ),
       body: ListView(
-        padding: const EdgeInsets.all(18),
-        children: const [
-          _NotificationItem(
-            title: 'Registration successful',
-            subtitle: 'Your registration for SUiTE 2026 has been confirmed.',
+        padding: const EdgeInsets.all(16),
+        children: [
+
+          const Text(
+            "TODAY",
+            style: TextStyle(
+              color: Colors.grey,
+              fontWeight: FontWeight.bold,
+              letterSpacing: 1,
+            ),
           ),
-          _NotificationItem(
-            title: 'Upcoming event reminder',
-            subtitle: 'Malam Melankoli will start soon.',
+
+          const SizedBox(height: 15),
+
+          buildNotificationCard(
+            title: "Event Booked Successfully",
+            message:
+                "You have successfully registered for Pentas Rona Jiwa.",
+            time: "11:31 AM",
+            unread: false,
+          ),
+
+          buildNotificationCard(
+            title: "3 More Days Until WINC 99 Starts!",
+            message:
+                "Reminder: Your event will begin in 3 days.",
+            time: "9:30 AM",
+            unread: true,
+          ),
+
+          buildNotificationCard(
+            title: "Event Review Request",
+            message:
+                "Please leave your feedback for the event.",
+            time: "7:45 AM",
+            unread: false,
+          ),
+
+          const SizedBox(height: 25),
+
+          const Text(
+            "YESTERDAY",
+            style: TextStyle(
+              color: Colors.grey,
+              fontWeight: FontWeight.bold,
+              letterSpacing: 1,
+            ),
+          ),
+
+          const SizedBox(height: 15),
+
+          buildNotificationCard(
+            title: "Event Review Request",
+            message:
+                "Tell us about your event experience.",
+            time: "4:43 AM",
+            unread: false,
+          ),
+
+          buildNotificationCard(
+            title: "Event Booked Successfully",
+            message:
+                "Registration completed successfully.",
+            time: "10:50 AM",
+            unread: false,
           ),
         ],
       ),
     );
   }
-}
 
-class _NotificationItem extends StatelessWidget {
-  final String title;
-  final String subtitle;
-
-  const _NotificationItem({required this.title, required this.subtitle});
-
-  @override
-  Widget build(BuildContext context) {
+  Widget buildNotificationCard({
+    required String title,
+    required String message,
+    required String time,
+    required bool unread,
+  }) {
     return Container(
       margin: const EdgeInsets.only(bottom: 12),
-      padding: const EdgeInsets.all(16),
+      padding: const EdgeInsets.all(15),
       decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(16),
+        color: unread
+            ? const Color(0xFF2B1E45)
+            : const Color(0xFF1E1E1E),
+        borderRadius: BorderRadius.circular(15),
       ),
       child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Container(
-            height: 42,
-            width: 42,
-            decoration: const BoxDecoration(
-              gradient: AppColors.primaryGradient,
-              shape: BoxShape.circle,
+
+          CircleAvatar(
+            backgroundColor: Colors.deepPurple.withValues(alpha: 0.2),
+            child: const Icon(
+              Icons.notifications_none,
+              color: Colors.deepPurpleAccent,
             ),
-            child: const Icon(Icons.notifications, color: Colors.white),
           ),
+
           const SizedBox(width: 12),
+
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+
                 Text(
                   title,
                   style: const TextStyle(
-                    fontWeight: FontWeight.w700,
-                    color: AppColors.textDark,
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
                   ),
                 ),
-                const SizedBox(height: 4),
+
+                const SizedBox(height: 5),
+
                 Text(
-                  subtitle,
+                  message,
                   style: const TextStyle(
-                    color: AppColors.textGrey,
+                    color: Colors.grey,
                     fontSize: 13,
+                  ),
+                ),
+
+                const SizedBox(height: 8),
+
+                Text(
+                  time,
+                  style: const TextStyle(
+                    color: Colors.grey,
+                    fontSize: 11,
                   ),
                 ),
               ],
             ),
           ),
+
+          if (unread)
+            Container(
+              width: 10,
+              height: 10,
+              decoration: const BoxDecoration(
+                color: Colors.deepPurpleAccent,
+                shape: BoxShape.circle,
+              ),
+            ),
         ],
       ),
     );

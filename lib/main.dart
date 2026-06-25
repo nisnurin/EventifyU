@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'features/user/home/home_screen.dart';
-import 'features/user/home/detail_event_screen.dart';
 import 'features/user/home/comfirm_register.dart';
 import 'features/user/events/detail_registration.dart';
 import 'features/user/events/my_event_screen.dart';
@@ -24,7 +23,7 @@ class MyEventApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: const AdminDashboardScreen(), // Admin Dashboard section -
+      home: const HomeScreen(),
     );
   }
 }

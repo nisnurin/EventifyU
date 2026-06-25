@@ -84,9 +84,11 @@ class _HomeScreenState extends State<HomeScreen> {
                       InkWell(
                         borderRadius: BorderRadius.circular(18),
                         onTap: () {
-                          Navigator.pushNamed(
+                          Navigator.push(
                             context,
-                            NotificationScreen.routeName,
+                            MaterialPageRoute(
+                              builder: (context) => const NotificationScreen(),
+                            ),
                           );
                         },
                         child: Container(

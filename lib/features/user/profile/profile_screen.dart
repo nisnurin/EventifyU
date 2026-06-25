@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'edit_profile_screen.dart';
 import 'general_setting_screen.dart';
 import 'e_certificate_screen.dart';
+import '../notification/notification_screen.dart';
+
 
 class ProfileScreen extends StatelessWidget {
   const ProfileScreen({super.key});
@@ -13,6 +15,20 @@ class ProfileScreen extends StatelessWidget {
       appBar: AppBar(
         title: const Text("Profile"),
         backgroundColor: Colors.black,
+         actions: [
+    IconButton(
+      icon: const Icon(Icons.notifications_none),
+      onPressed: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) =>
+                const NotificationScreen(),
+          ),
+        );
+      },
+    ),
+  ],
       ),
       body: Padding(
         padding: const EdgeInsets.all(20),
