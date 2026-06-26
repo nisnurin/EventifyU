@@ -21,6 +21,8 @@ dependencies:
   printing: ^5.13.0
 
   flutter_local_notifications: ^17.0.0
+  image_picker: ^1.2.2
+  intl: ^0.20.3
 
 dev_dependencies:
   flutter_test:

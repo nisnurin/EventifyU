@@ -54,7 +54,7 @@ class AdminProfileScreen extends StatelessWidget {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (_) => const AdminEditProfileScreen(),
+                      builder: (_) => AdminEditProfileScreen(),
                     ),
                   );
                 },
@@ -74,7 +74,7 @@ class AdminProfileScreen extends StatelessWidget {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (_) => const AdminSettingsScreen(),
+                      builder: (_) =>AdminSettingsScreen(),
                     ),
                   );
                 },

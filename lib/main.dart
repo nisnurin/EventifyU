@@ -58,7 +58,7 @@ class _MyEventAppState extends State<MyEventApp> {
 
       themeMode: isDarkMode ? ThemeMode.dark : ThemeMode.light,
 
-      home: const ProfileScreen(),
+      home: const AdminDashboardScreen(),
     );
   }
 }
