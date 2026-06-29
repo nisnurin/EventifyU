@@ -21,9 +21,11 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
     setState(() => _isLoading = true);
     // Tip: Use "1234" to pass the dummy validation
     bool success = await AuthRepository.verifyOtp(_otpController.text);
+    if (!mounted) return;
+
     setState(() => _isLoading = false);
 
-    if (success && mounted) {
+    if (success) {
       Navigator.pushAndRemoveUntil(
         context,
         MaterialPageRoute(builder: (_) => const HomeScreen()),
@@ -52,9 +54,12 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
           children: [
             const Text("Verification", style: AppTextStyles.heading1),
             const SizedBox(height: 8),
-            const Text("Enter the 4-digit OTP sent to your email.", style: AppTextStyles.body),
+            const Text(
+              "Enter the 4-digit OTP sent to your email.",
+              style: AppTextStyles.body,
+            ),
             const SizedBox(height: 40),
-            
+
             CustomTextField(
               hintText: "Enter OTP (Try 1234)",
               prefixIcon: Icons.security,
@@ -62,7 +67,7 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
               keyboardType: TextInputType.number,
             ),
             const SizedBox(height: 40),
-            
+
             CustomButton(
               text: "Verify & Proceed",
               isLoading: _isLoading,

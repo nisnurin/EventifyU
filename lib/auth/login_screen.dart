@@ -22,25 +22,32 @@ class _LoginScreenState extends State<LoginScreen> {
 
   void _handleLogin() async {
     setState(() => _isLoading = true);
-    
+
     bool success = await AuthRepository.login(
-      _emailController.text, 
-      _passwordController.text
+      _emailController.text,
+      _passwordController.text,
     );
+    if (!mounted) return;
 
     setState(() => _isLoading = false);
 
-    if (success && mounted) {
+    if (success) {
       // Dummy check to route to admin or user
       if (_emailController.text == 'admin') {
-        Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => const AdminDashboardScreen()));
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (_) => const AdminDashboardScreen()),
+        );
       } else {
-        Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => const HomeScreen()));
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (_) => const HomeScreen()),
+        );
       }
     } else {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text("Invalid Credentials")),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(const SnackBar(content: Text("Invalid Credentials")));
     }
   }
 
@@ -56,21 +63,28 @@ class _LoginScreenState extends State<LoginScreen> {
             children: [
               const SizedBox(height: 40),
               Center(
-                child: Icon(Icons.event_available, size: 80, color: AppColors.primary),
+                child: Icon(
+                  Icons.event_available,
+                  size: 80,
+                  color: AppColors.primary,
+                ),
               ),
               const SizedBox(height: 40),
               const Text("Welcome Back!", style: AppTextStyles.heading1),
               const SizedBox(height: 8),
-              const Text("Sign in to continue to EventifyU", style: AppTextStyles.body),
+              const Text(
+                "Sign in to continue to EventifyU",
+                style: AppTextStyles.body,
+              ),
               const SizedBox(height: 40),
-              
+
               CustomTextField(
                 hintText: "Email or Student ID",
                 prefixIcon: Icons.email_outlined,
                 controller: _emailController,
               ),
               const SizedBox(height: 16),
-              
+
               CustomTextField(
                 hintText: "Password",
                 prefixIcon: Icons.lock_outline,
@@ -78,38 +92,52 @@ class _LoginScreenState extends State<LoginScreen> {
                 isPassword: true,
               ),
               const SizedBox(height: 12),
-              
+
               Align(
                 alignment: Alignment.centerRight,
                 child: TextButton(
                   onPressed: () {},
-                  child: const Text("Forgot Password?", style: TextStyle(color: AppColors.primary)),
+                  child: const Text(
+                    "Forgot Password?",
+                    style: TextStyle(color: AppColors.primary),
+                  ),
                 ),
               ),
               const SizedBox(height: 24),
-              
+
               CustomButton(
                 text: "Login",
                 isLoading: _isLoading,
                 onPressed: _handleLogin,
               ),
               const SizedBox(height: 24),
-              
+
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  const Text("Don't have an account? ", style: AppTextStyles.body),
+                  const Text(
+                    "Don't have an account? ",
+                    style: AppTextStyles.body,
+                  ),
                   GestureDetector(
                     onTap: () {
-                      Navigator.push(context, MaterialPageRoute(builder: (_) => const RegisterScreen()));
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (_) => const RegisterScreen(),
+                        ),
+                      );
                     },
                     child: const Text(
-                      "Register", 
-                      style: TextStyle(color: AppColors.primary, fontWeight: FontWeight.bold),
+                      "Register",
+                      style: TextStyle(
+                        color: AppColors.primary,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                   ),
                 ],
-              )
+              ),
             ],
           ),
         ),

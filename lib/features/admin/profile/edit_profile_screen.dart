@@ -15,13 +15,10 @@ class AdminEditProfileScreen extends StatefulWidget {
   });
 
   @override
-  State<AdminEditProfileScreen> createState() =>
-      _AdminEditProfileScreenState();
+  State<AdminEditProfileScreen> createState() => _AdminEditProfileScreenState();
 }
 
-class _AdminEditProfileScreenState
-    extends State<AdminEditProfileScreen> {
-
+class _AdminEditProfileScreenState extends State<AdminEditProfileScreen> {
   late TextEditingController nameController;
   late TextEditingController adminIdController;
   late TextEditingController emailController;
@@ -49,48 +46,29 @@ class _AdminEditProfileScreenState
   InputDecoration inputStyle(String label) {
     return InputDecoration(
       labelText: label,
-      border: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(10),
-      ),
+      border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
       focusedBorder: OutlineInputBorder(
-
         borderRadius: BorderRadius.circular(10),
-        borderSide: const BorderSide(
-          color: Colors.deepPurple,
-          width: 2,
-        ),
+        borderSide: const BorderSide(color: Colors.deepPurple, width: 2),
       ),
     );
   }
 
   @override
   Widget build(BuildContext context) {
-
-    final isDark =
-        Theme.of(context).brightness == Brightness.dark;
-
     return Scaffold(
-      backgroundColor:
-          Theme.of(context).scaffoldBackgroundColor,
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
 
-      appBar: AppBar(
-        title: const Text("Edit Profile"),
-        elevation: 0,
-      ),
+      appBar: AppBar(title: const Text("Edit Profile"), elevation: 0),
 
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(20),
         child: Column(
           children: [
-
             const CircleAvatar(
               radius: 45,
               backgroundColor: Colors.deepPurple,
-              child: Icon(
-                Icons.person,
-                color: Colors.white,
-                size: 45,
-              ),
+              child: Icon(Icons.person, color: Colors.white, size: 45),
             ),
 
             const SizedBox(height: 25),
@@ -111,8 +89,7 @@ class _AdminEditProfileScreenState
 
             TextField(
               controller: emailController,
-              keyboardType:
-                  TextInputType.emailAddress,
+              keyboardType: TextInputType.emailAddress,
               decoration: inputStyle("Email"),
             ),
 
@@ -120,10 +97,8 @@ class _AdminEditProfileScreenState
 
             TextField(
               controller: phoneController,
-              keyboardType:
-                  TextInputType.phone,
-              decoration:
-                  inputStyle("Phone Number"),
+              keyboardType: TextInputType.phone,
+              decoration: inputStyle("Phone Number"),
             ),
 
             const SizedBox(height: 30),
@@ -133,30 +108,19 @@ class _AdminEditProfileScreenState
               height: 50,
               child: ElevatedButton(
                 style: ElevatedButton.styleFrom(
-                  backgroundColor:
-                      Colors.deepPurple,
+                  backgroundColor: Colors.deepPurple,
                 ),
                 onPressed: () {
-
-                  Navigator.pop(
-                    context,
-                    {
-                      "name": nameController.text,
-                      "adminId":
-                          adminIdController.text,
-                      "email":
-                          emailController.text,
-                      "phone":
-                          phoneController.text,
-                    },
-                  );
+                  Navigator.pop(context, {
+                    "name": nameController.text,
+                    "adminId": adminIdController.text,
+                    "email": emailController.text,
+                    "phone": phoneController.text,
+                  });
                 },
                 child: const Text(
                   "Save Changes",
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 16,
-                  ),
+                  style: TextStyle(color: Colors.white, fontSize: 16),
                 ),
               ),
             ),

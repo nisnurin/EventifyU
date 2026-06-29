@@ -17,7 +17,6 @@ class _GeneralSettingsScreenState extends State<GeneralSettingsScreen> {
 
     final isDark = appState.isDarkMode;
 
-
     return Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
 
@@ -30,17 +29,15 @@ class _GeneralSettingsScreenState extends State<GeneralSettingsScreen> {
         padding: const EdgeInsets.all(20),
         child: Column(
           children: [
-
             SwitchListTile(
               title: Text(
                 "Dark Mode",
                 style: TextStyle(
                   color: Theme.of(context).textTheme.bodyLarge?.color,
-                      
                 ),
               ),
               value: appState.isDarkMode,
-              activeColor: Colors.deepPurple,
+              activeThumbColor: Colors.deepPurple,
               onChanged: (value) {
                 appState.changeTheme(value);
               },
@@ -51,11 +48,11 @@ class _GeneralSettingsScreenState extends State<GeneralSettingsScreen> {
               title: Text(
                 "Notification",
                 style: TextStyle(
-                  color:  Theme.of(context).textTheme.bodyLarge?.color,
+                  color: Theme.of(context).textTheme.bodyLarge?.color,
                 ),
               ),
               value: notification,
-activeColor: Colors.deepPurple,
+              activeThumbColor: Colors.deepPurple,
               onChanged: (value) {
                 setState(() {
                   notification = value;
